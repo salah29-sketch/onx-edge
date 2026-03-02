@@ -86,4 +86,11 @@ public function portfolio(Request $request)
      }
 
 
+     public function saleh(){
+            $test = "aymen mkharwed";
+        return view('saleh' , ['test' => $test
+        ]);
+     }
+
+
    }

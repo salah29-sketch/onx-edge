@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class EditableContent extends Model
 {
     use HasFactory;
-     protected $fillable = ['key', 'content'];
+    protected $fillable = ['key', 'content'];
 }

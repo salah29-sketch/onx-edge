@@ -16,6 +16,7 @@ Route::post('/check-appointment', [HomeController::class, 'checkAvailability']);
 
 Route::post('/reservation-api', [ReservationController::class, 'store']);
 
+Route::get('/saleh' , [HomeController::class , 'saleh']);
 
 Route::redirect('/home', '/admin');
 Auth::routes(['register' => false]);
