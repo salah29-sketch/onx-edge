@@ -6,11 +6,16 @@ use App\Mail\BookingConfirmationMail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ServiceController;
+
 
 Route::get('/', [HomeController::class ,'index'])->name('home');
 Route::get('/portfolio', [HomeController::class ,'portfolio'])->name('portfolio');
 Route::get('/booking', [HomeController::class ,'booking'])->name('booking');
 Route::post('/check-appointment', [HomeController::class, 'checkAvailability']);
+Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+Route::get('/services/events', [ServiceController::class, 'events'])->name('services.events');
+Route::get('/services/ads', [ServiceController::class, 'ads'])->name('services.ads');
 // Route::post('/reservation-api', [ReservationController::class, 'store']);
 
 
