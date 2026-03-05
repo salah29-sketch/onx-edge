@@ -20,7 +20,7 @@
     </p>
 
     <div class="d-flex justify-content-center gap-3 flex-wrap">
-      <a href="#packages" class="btn btn-onx">مشاهدة الباقات</a>
+      <a href="#packages" class="btn btn-onx-ghost">مشاهدة الباقات</a>
 
       <a href="https://wa.me/213540573518?text=سلام%20ONX%20حاب%20نستفسر%20على%20باقات%20تصوير%20الحفلات"
          target="_blank" class="btn btn-onx-ghost">
@@ -222,7 +222,7 @@
               <i class="bi bi-whatsapp"></i> واتساب
             </a>
 
-            <a class="btn btn-onx" href="{{ route('booking') }}">Booking</a>
+            <a class="btn btn-onx-ghost" href="{{ route('booking') }}">Booking</a>
           </div>
         </div>
       </div>

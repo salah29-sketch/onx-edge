@@ -23,7 +23,7 @@
         <i class="bi bi-calendar2-event"></i> تصوير الحفلات
       </a>
 
-      <a class="btn btn-onx-ghost" href="/services/ads">
+      <a class="btn btn-onx-ghost" href="/services/marketing">
         <i class="bi bi-megaphone"></i> الإعلانات
       </a>
     </div>
@@ -60,7 +60,7 @@
         </div>
       </div>
 
-      {{-- Ads --}}
+      {{-- Marketing --}}
       <div class="col-lg-6">
         <div class="onx-card onx-service-card">
           <img src="{{ asset('img/marketing.jpg') }}" class="onx-img" alt="marketing">
@@ -69,7 +69,7 @@
             <h3 class="fw-bold mb-2">الإعلانات</h3>
             <p class="onx-muted mb-4">إعلانات حسب الطلب + اشتراك شهري بسعر ثابت.</p>
 
-            <a href="/services/ads" class="btn btn-onx-ghost">
+            <a href="/services/marketing" class="btn btn-onx-ghost">
               اطلب عرض سعر <i class="bi bi-arrow-left-short"></i>
             </a>
           </div>

@@ -79,7 +79,7 @@
         <h6 class="fw-bold mb-3">الخدمات</h6>
         <ul class="list-unstyled onx-footer-links mb-0">
           <li><a href="/services/events">تصوير الحفلات</a></li>
-          <li><a href="/services/ads">الإعلانات</a></li>
+          <li><a href="/services/marketing">الإعلانات</a></li>
         </ul>
       </div>
 

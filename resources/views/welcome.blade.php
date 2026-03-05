@@ -13,7 +13,7 @@
 
     <div class="d-flex justify-content-center gap-2 mt-4 flex-wrap">
       <a class="btn btn-onx-ghost" href="/services/events">تصوير الحفلات</a>
-      <a class="btn btn-onx-ghost" href="/services/ads">الإعلانات</a>
+      <a class="btn btn-onx-ghost" href="/services/marketing">الإعلانات</a>
       <a class="btn btn-onx-ghost" href="/services">كل الخدمات</a>
     </div>
   </div>
@@ -80,7 +80,7 @@
           <div class="p-4 text-center">
             <h3 class="fw-bold mb-2">الإعلانات</h3>
             <p class="onx-muted mb-4">حسب الطلب أو اشتراك شهري ثابت</p>
-            <a href="/services/ads" class="btn btn-onx-ghost">اطلب عرض سعر</a>
+            <a href="/marketing" class="btn btn-onx-ghost">اطلب عرض سعر</a>
           </div>
         </div>
       </div>
