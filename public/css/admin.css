@@ -1,0 +1,27 @@
+/* =========================================================
+   ONX Admin Styles (CoreUI + Bootstrap 4)
+   - هذا الملف خاص بلوحة التحكم فقط
+   - لا تضع فيه أي CSS للواجهة الأمامية (Front)
+   ========================================================= */
+
+/* ✅ Fix: DataTables header/body width mismatch when scrollX enabled */
+.dataTables_wrapper .dataTables_scrollHeadInner,
+.dataTables_wrapper .dataTables_scrollHeadInner table{
+  width: 100% !important;
+}
+
+table.dataTable{
+  width: 100% !important;
+}
+
+/* ✅ Optional: تحسين شكل أزرار DataTables قليلاً */
+.dt-buttons .btn{
+  border-radius: 4px !important;
+  padding: .35rem .6rem !important;
+  font-size: .85rem !important;
+}
+
+/* ✅ Optional: تحسين مسافات جدول الادمن */
+.dataTables_wrapper{
+  padding-top: 10px;
+}

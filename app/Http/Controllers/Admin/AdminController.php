@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Service;
-use App\GalleryItem;
-use App\HomeContent;
-use App\ServiceHome;
+use App\Models\Service;
+use App\Models\GalleryItem;
+use App\Models\HomeContent;
+use App\Models\ServiceHome;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 

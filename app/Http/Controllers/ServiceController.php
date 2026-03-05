@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\View\View;
 use App\Models\EventPackage;
+use App\Models\AdPackage;
 
 class ServiceController extends Controller
 {
+    /**
+     * صفحة /services
+     */
     public function index(): View
     {
         $services = [
@@ -18,62 +22,67 @@ class ServiceController extends Controller
             [
                 'title' => 'الإعلانات',
                 'desc'  => 'إعلانات احترافية + اشتراكات شهرية للمشاريع.',
-                'route' => route('services.ads'),
+                'route' => route('services.marketing'),
             ],
         ];
 
         return view('services.index', compact('services'));
     }
 
+    /**
+     * صفحة /services/events
+     * ✅ يجعل featured في الوسط حتى لو صار عندك 5+ باقات
+     */
     public function events(): View
-{
-    $packages = EventPackage::where('is_active', true)->get();
-
-    $featured = $packages->where('is_featured', true)->first();
-
-    $others = $packages->where('is_featured', false);
-
-    // ترتيب: نصف قبل الـfeatured ونصف بعده
-    $before = $others->take(ceil($others->count()/2));
-    $after  = $others->slice(ceil($others->count()/2));
-
-    $packagesOrdered = $before
-        ->merge($featured ? [$featured] : [])
-        ->merge($after);
-
-    $travelNote = 'خارج ولاية سيدي بلعباس: تُضاف رسوم تنقل حسب الولاية.';
-
-    return view('services.events', [
-        'packages' => $packagesOrdered,
-        'travelNote' => $travelNote
-    ]);
-}
-
-    public function ads(): View
     {
-        $oneTime = [
-            [
-                'name' => 'إعلان مرة واحدة',
-                'price_note' => 'حسب الطلب',
-                'features' => ['تصوير احترافي', 'مونتاج', 'مناسب للمنتجات والخدمات'],
-            ],
-        ];
+        $all = EventPackage::where('is_active', true)
+            ->orderByDesc('is_featured')
+            ->orderBy('sort_order')
+            ->get();
 
-        $monthly = [
-            [
-                'name' => 'اشتراك شهري Starter',
-                'price' => 25000,
-                'features' => ['عدد فيديوهات شهري', 'جلسة تصوير', 'تعديلات محدودة'],
-                'featured' => true,
-            ],
-            [
-                'name' => 'اشتراك شهري Pro',
-                'price' => 40000,
-                'features' => ['عدد أكبر من الفيديوهات', 'أولوية في التسليم', 'تعديلات أكثر'],
-                'featured' => false,
-            ],
-        ];
+        $featured = $all->firstWhere('is_featured', true);
+        $others   = $all->where('is_featured', false)->values();
 
-        return view('services.ads', compact('oneTime', 'monthly'));
+        // نقسم الآخرين إلى نصفين ثم نضع featured في الوسط
+        $half   = (int) ceil($others->count() / 2);
+        $before = $others->slice(0, $half);
+        $after  = $others->slice($half);
+
+        $packagesOrdered = collect();
+        $packagesOrdered = $packagesOrdered->merge($before);
+
+        if ($featured) {
+            $packagesOrdered->push($featured);
+        }
+
+        $packagesOrdered = $packagesOrdered->merge($after);
+
+        $travelNote = 'خارج ولاية سيدي بلعباس: تُضاف رسوم تنقل حسب الولاية.';
+
+        return view('services.events', [
+            'packages'   => $packagesOrdered,
+            'travelNote' => $travelNote,
+        ]);
+    }
+
+    /**
+     * صفحة /services/marketing
+     * ✅ كل المحتوى من DB (monthly + custom)
+     */
+    public function marketing(): View
+    {
+        $monthly = AdPackage::where('is_active', true)
+            ->where('type', 'monthly')
+            ->orderByDesc('is_featured')
+            ->orderBy('sort_order')
+            ->get();
+
+        $custom = AdPackage::where('is_active', true)
+            ->where('type', 'custom')
+            ->orderByDesc('is_featured')
+            ->orderBy('sort_order')
+            ->get();
+
+        return view('services.marketing', compact('monthly', 'custom'));
     }
 }

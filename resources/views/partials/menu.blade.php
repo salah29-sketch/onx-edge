@@ -11,7 +11,14 @@
                     {{ trans('global.dashboard') }}
                 </a>
             </li>
-            
+
+            <li class="nav-item">
+  <a href="{{ route('admin.adpackages.index') }}"
+     class="nav-link {{ request()->is('admin/adpackages*') ? 'active' : '' }}">
+    <i class="fa-fw fas fa-bullhorn nav-icon"></i>
+    marketing Packages
+  </a>
+</li>
              <li class="nav-item">
                 <a href="{{ route("admin.gallery.index") }}" class="nav-link">
                     <i class="nav-icon fas fa-fw fa-photo">
