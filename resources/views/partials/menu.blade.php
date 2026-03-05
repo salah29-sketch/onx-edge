@@ -1,3 +1,4 @@
+
 <div class="sidebar">
     <nav class="sidebar-nav">
 
@@ -10,6 +11,7 @@
                     {{ trans('global.dashboard') }}
                 </a>
             </li>
+            
              <li class="nav-item">
                 <a href="{{ route("admin.gallery.index") }}" class="nav-link">
                     <i class="nav-icon fas fa-fw fa-photo">
@@ -63,6 +65,13 @@
                     </a>
                 </li>
             @endcan
+            <li class="nav-item">
+                 <a href="{{ route('admin.event-packages.index') }}"
+                  class="nav-link {{ request()->is('admin/event-packages') || request()->is('admin/event-packages/*') ? 'active' : '' }}">
+                 <i class="fa-fw fas fa-box-open nav-icon"></i>
+                 event packages
+                 </a>
+             </li>
             @can('client_access')
                 <li class="nav-item">
                     <a href="{{ route("admin.clients.index") }}" class="nav-link {{ request()->is('admin/clients') || request()->is('admin/clients/*') ? 'active' : '' }}">

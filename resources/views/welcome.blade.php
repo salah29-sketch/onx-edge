@@ -1,100 +1,107 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.front')
+@section('title','ONX — Accueil')
 
-        <title>Laravel</title>
+@section('content')
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+{{-- HERO --}}
+<section class="onx-hero">
+  <div class="container text-center py-5">
+    <h1 class="display-4 fw-bold">Donnez vie à vos moments les plus importants<span style="color:var(--orange)">.</span></h1>
+    <p class="lead mt-3 onx-muted">
+      Mariages, événements et publicités — جودة سينمائية من سيدي بلعباس إلى كل الولايات.
+    </p>
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
+    <div class="d-flex justify-content-center gap-2 mt-4 flex-wrap">
+      <a class="btn btn-onx-ghost" href="/services/events">تصوير الحفلات</a>
+      <a class="btn btn-onx-ghost" href="/services/ads">الإعلانات</a>
+      <a class="btn btn-onx-ghost" href="/services">كل الخدمات</a>
+    </div>
+  </div>
+</section>
 
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://vapor.laravel.com">Vapor</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
-            </div>
+{{-- QUICK FEATURES --}}
+<section class="onx-section">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="onx-feature text-center">
+          <div class="icon">🎥</div>
+          <h5 class="fw-bold mb-2">تصوير احترافي</h5>
+          <div class="onx-muted">لقطات سينمائية وإضاءة نظيفة</div>
         </div>
-    </body>
-</html>
+      </div>
+
+      <div class="col-md-4">
+        <div class="onx-feature text-center">
+          <div class="icon">✂️</div>
+          <h5 class="fw-bold mb-2">مونتاج وتلوين</h5>
+          <div class="onx-muted">إيقاع جميل + لمسة فنية</div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="onx-feature text-center">
+          <div class="icon">⚡</div>
+          <h5 class="fw-bold mb-2">تسليم حسب الباقة</h5>
+          <div class="onx-muted">نلتزم بالوقت المتفق عليه</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{-- SERVICES PREVIEW --}}
+<section class="onx-section pt-0">
+  <div class="container">
+    <div class="d-flex align-items-end justify-content-between flex-wrap gap-2 mb-4">
+      <div>
+        <h2 class="fw-bold mb-1">الخدمات</h2>
+        <div class="onx-muted">ابدأ بالخدمة التي تحتاجها</div>
+      </div>
+      <a class="btn btn-onx-ghost" href="/services">عرض كل الخدمات</a>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="onx-card">
+          <img src="{{ asset('img/events.jpg') }}" class="onx-img" alt="events">
+          <div class="p-4 text-center">
+            <h3 class="fw-bold mb-2">تصوير الحفلات</h3>
+            <p class="onx-muted mb-4">باقات ثابتة + رسوم تنقل خارج الولاية</p>
+            <a href="/services/events" class="btn btn-onx-ghost">شاهد الباقات</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="onx-card">
+          {{-- غيّر الاسم حسب صورتك --}}
+          <img src="{{ asset('img/commercial.jpg') }}" class="onx-img" alt="commercial">
+          <div class="p-4 text-center">
+            <h3 class="fw-bold mb-2">الإعلانات</h3>
+            <p class="onx-muted mb-4">حسب الطلب أو اشتراك شهري ثابت</p>
+            <a href="/services/ads" class="btn btn-onx-ghost">اطلب عرض سعر</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{{-- CTA --}}
+<section class="onx-section pt-0" id="contact">
+  <div class="container">
+    <div class="onx-cta text-center">
+      <h2 class="fw-bold mb-2">جاهز تبدأ؟</h2>
+      <div class="onx-muted mb-4">اتصل بنا وسنقترح أفضل باقة حسب احتياجك</div>
+
+      <div class="d-flex justify-content-center gap-2 flex-wrap">
+        <a class="btn btn-onx-ghost" href="https://wa.me/213000000000">واتساب</a>
+        <a class="btn btn-onx-ghost" href="tel:+213000000000">اتصال</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+@endsection
