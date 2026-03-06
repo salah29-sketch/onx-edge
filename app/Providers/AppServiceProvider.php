@@ -24,9 +24,13 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {
-       View::composer('*', function ($view) {
-        $view->with('companySettings', Company::first());
+{
+    view()->share('data', 'starter'); // قيمة افتراضية
+
+    view()->composer('*', function ($view) {
+        // غيّر هذا حسب اسم موديل/جدول إعدادات الشركة عندك
+        $companySettings = \App\Models\Company::first();
+        $view->with('companySettings', $companySettings);
     });
-    }
+}
 }

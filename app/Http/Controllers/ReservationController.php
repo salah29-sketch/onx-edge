@@ -1,87 +1,135 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Client;
-use App\Service;
-use App\Employee;
-use Carbon\Carbon;
-use App\Appointment;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\BookingConfirmationMail;
 
+use App\Models\Booking;
+use App\Models\Client;
+use App\Models\EventPackage;
+use App\Models\AdPackage;
+use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
-  public function store(Request $request)
-{
-    $validated = $request->validate([
-    'name'     => 'required|string|max:255',
-    'email'    => 'required|email',
-    'phone'    => 'required|string|max:20',
-    'date'     => 'required|date',
-    'services' => 'array|required',
-    'services.*' => 'exists:services,id',
-]);
-        if ($request->event_location_id === 'other' && empty($request->custom_event_location)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'يرجى إدخال مكان الحفل عند اختيار "مكان آخر".'
+    public function store(Request $request)
+    {
+        $serviceType = $request->input('service_type', $request->input('booking_type'));
+
+        $selected = $request->input('selected_package');
+
+        $packageType = $request->input('package_type');
+        $packageId   = $request->input('package_id');
+
+        if ($selected && (!$packageType || !$packageId)) {
+            if (preg_match('/^(event|ad|ads):(\d+)$/', $selected, $m)) {
+                $prefix = $m[1];
+                $packageId = (int) $m[2];
+                $packageType = $prefix === 'event' ? 'event' : 'ads';
+            }
+        }
+
+        $rules = [
+            'service_type' => 'required|in:event,ads',
+            'name'  => 'required|string|max:255',
+            'phone' => 'required|string|max:30',
+            'email' => 'nullable|email|max:255',
+            'notes' => 'nullable|string',
+        ];
+
+        if ($serviceType === 'event') {
+            $rules = array_merge($rules, [
+                'event_date' => 'required|date',
+                'event_location_id' => 'nullable',
+                'custom_event_location' => 'nullable|string|max:255',
             ]);
         }
 
-// جرّب الإيميل أولاً
-try {
-    $serviceNames = Service::whereIn('id', $validated['services'])->pluck('name')->toArray();
-    $totalPrice = Service::whereIn('id', $validated['services'])->sum('price');
+        if ($serviceType === 'ads') {
+            $rules = array_merge($rules, [
+                'business_name' => 'nullable|string|max:255',
+                'budget' => 'nullable|numeric|min:0',
+                'deadline' => 'nullable|date',
+            ]);
+        }
 
-    $data = [
-        'client_name' => $validated['name'],
-        'booking_id'  => null,
-        'email'       => $validated['email'],
-        'date'        => Carbon::parse($validated['date'])->format('Y-m-d'),
-        'time'        => Carbon::parse($validated['date'])->format('H:i'),
-        'services'    => $serviceNames,
-        'total_price' => $totalPrice,
-    ];
+        $request->merge([
+            'service_type' => $serviceType,
+        ]);
 
-    Mail::to($validated['email'])->send(new BookingConfirmationMail($data));
+        $data = $request->validate($rules);
 
-    $client = Client::firstOrCreate(
-        ['email' => $validated['email']],
-        ['name' => $validated['name'], 'phone' => $validated['phone']]
-    );
+        $data['package_type'] = null;
+        $data['package_id']   = null;
 
-    $randomEmployee = Employee::inRandomOrder()->first();
+        if ($serviceType === 'event' && $packageId && $packageType === 'event') {
+            $package = EventPackage::where('is_active', true)->find($packageId);
+            if ($package) {
+                $data['package_type'] = EventPackage::class;
+                $data['package_id']   = $package->id;
+            }
+        }
 
-    $appointment = Appointment::create([
-        'client_id'   => $client->id,
-        'employee_id' => optional($randomEmployee)->id,
-        'start_time'  => $validated['date'],
-        'finish_time' => Carbon::parse($validated['date'])->addHours(4),
-        'status'      => 0,
-        'event_location_id' => is_numeric($request['event_location_id']) ? $request['event_location_id'] : null,
-        'custom_event_location' => $request['event_location_id'] === 'other' ? $request['custom_event_location'] : null,
-        'price'=>$data['total_price']
-    ]);
+        if ($serviceType === 'ads' && $packageId) {
+            $package = AdPackage::where('is_active', true)->find($packageId);
 
-    $appointment->services()->sync($validated['services']);
+            if ($package && in_array($package->type, ['monthly', 'custom'], true)) {
+                $data['package_type'] = AdPackage::class;
+                $data['package_id']   = $package->id;
+            }
+        }
 
-    return response()->json([
-        'success' => true,
-        'id' => $appointment->id
-    ]);
-} catch (\Exception $e) {
-    Log::error("Échec d’envoi d’email: " . $e->getMessage());
+        if ($serviceType === 'event') {
+            if (($request->input('event_location_id') === 'other') && !$request->filled('custom_event_location')) {
+                return back()
+                    ->withErrors(['custom_event_location' => 'اكتب مكان الحفل.'])
+                    ->withInput();
+            }
+        }
 
-    return response()->json([
-        'success' => false,
-        'message' => '❌ ف '.$e->getMessage()
-    ]);
+        if ($serviceType === 'event') {
+            $exists = Booking::where([
+                ['service_type', 'event'],
+                ['event_date', $data['event_date']]
+            ])
+            ->whereIn('status', ['unconfirmed', 'confirmed', 'in_progress'])
+            ->exists();
+
+            if ($exists) {
+                return back()->withErrors([
+                    'event_date' => 'هذا التاريخ محجوز بالفعل، اختر تاريخًا آخر.',
+                ])->withInput();
+            }
+        }
+
+        $client = Client::where('phone', $data['phone'])
+            ->when(!empty($data['email']), function ($query) use ($data) {
+                $query->orWhere('email', $data['email']);
+            })
+            ->first();
+
+        if (!$client) {
+            $client = Client::create([
+                'name'  => $data['name'],
+                'phone' => $data['phone'],
+                'email' => $data['email'] ?? null,
+            ]);
+        } else {
+            $client->update([
+                'name'  => $data['name'],
+                'phone' => $data['phone'],
+                'email' => $data['email'] ?? $client->email,
+            ]);
+        }
+
+        $data['client_id'] = $client->id;
+
+        // جديد = غير مؤكد = برتقالي
+        $data['status'] = 'unconfirmed';
+
+        Booking::create($data);
+
+        return redirect()->back()->with(
+            'message',
+            'تم إرسال طلبك بنجاح ✅ سنتواصل معك قريبًا'
+        );
+    }
 }
-
-}
-
-}
-

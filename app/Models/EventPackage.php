@@ -18,4 +18,8 @@ class EventPackage extends Model
         'is_featured' => 'boolean',
         'is_active' => 'boolean',
     ];
+    public function bookings()
+{
+  return $this->morphMany(\App\Models\Booking::class, 'package');
+}
 }

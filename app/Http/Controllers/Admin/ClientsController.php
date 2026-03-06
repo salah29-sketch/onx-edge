@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyClientRequest;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
+use App\Models\Client;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,9 +16,11 @@ class ClientsController extends Controller
 {
     public function index(Request $request)
     {
+        abort_if(Gate::denies('client_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         if ($request->ajax()) {
-            $query = Client::query()->select(sprintf('%s.*', (new Client)->table));
-            $table = Datatables::of($query);
+            $query = Client::query()->select(sprintf('%s.*', (new Client)->getTable()));
+            $table = DataTables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
@@ -38,18 +40,10 @@ class ClientsController extends Controller
                 ));
             });
 
-            $table->editColumn('id', function ($row) {
-                return $row->id ? $row->id : "";
-            });
-            $table->editColumn('name', function ($row) {
-                return $row->name ? $row->name : "";
-            });
-            $table->editColumn('phone', function ($row) {
-                return $row->phone ? $row->phone : "";
-            });
-            $table->editColumn('email', function ($row) {
-                return $row->email ? $row->email : "";
-            });
+            $table->editColumn('id', fn($row) => $row->id ?? '');
+            $table->editColumn('name', fn($row) => $row->name ?? '');
+            $table->editColumn('phone', fn($row) => $row->phone ?? '');
+            $table->editColumn('email', fn($row) => $row->email ?? '');
 
             $table->rawColumns(['actions', 'placeholder']);
 
@@ -68,9 +62,11 @@ class ClientsController extends Controller
 
     public function store(StoreClientRequest $request)
     {
-        $client = Client::create($request->all());
+        Client::create($request->validated());
 
-        return redirect()->route('admin.clients.index');
+        return redirect()
+            ->route('admin.clients.index')
+            ->with('message', 'تم إنشاء العميل بنجاح.');
     }
 
     public function edit(Client $client)
@@ -82,14 +78,22 @@ class ClientsController extends Controller
 
     public function update(UpdateClientRequest $request, Client $client)
     {
-        $client->update($request->all());
+        $client->update($request->validated());
 
-        return redirect()->route('admin.clients.index');
+        return redirect()
+            ->route('admin.clients.index')
+            ->with('message', 'تم تحديث بيانات العميل بنجاح.');
     }
 
     public function show(Client $client)
     {
         abort_if(Gate::denies('client_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $client->load([
+            'bookings.eventPackage',
+            'bookings.adPackage',
+            'bookings.eventLocation',
+        ]);
 
         return view('admin.clients.show', compact('client'));
     }
@@ -100,7 +104,7 @@ class ClientsController extends Controller
 
         $client->delete();
 
-        return back();
+        return back()->with('message', 'تم حذف العميل بنجاح.');
     }
 
     public function massDestroy(MassDestroyClientRequest $request)

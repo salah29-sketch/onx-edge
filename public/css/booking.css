@@ -1,685 +1,483 @@
-[ng\:cloak], [ng-cloak], .ng-cloak {
-    display: none;
+/* =========================================================
+   BOOKING PAGE - ONX
+========================================================= */
+
+.onx-hero-booking{
+  position:relative;
+  min-height:56vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:url('/img/hero-booking.jpg') center/cover no-repeat;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.onx-hero-booking .onx-hero-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,.28), rgba(0,0,0,.88));
+}
+.onx-hero-booking .container{
+  position:relative;
+  z-index:2;
+  max-width:920px;
+}
+.onx-hero-booking h1{
+  font-size:2.2rem;
+}
+.onx-hero-booking p{
+  max-width:720px;
+  margin-inline:auto;
 }
 
-* {
-	box-sizing: border-box;
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+.onx-booking-shell{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 360px;
+  gap:16px;
+  align-items:start;
+}
+@media(max-width:992px){
+  .onx-booking-shell{
+    grid-template-columns:1fr;
+  }
 }
 
-@media (max-width: 768px) {
-    .datepicker-calendar,
-    .timepicker-container-outer {
-        width: 100%;
-        float: none;
-    }
-
-    .buttons-container {
-
-        position: relative;
-        float: none;
-        width: 100%;
-        display: flex ;
-        justify-content: flex-end;
-        margin-top: 20px;
-    }
+.onx-form-card,
+.onx-side-card{
+  padding:16px;
 }
 
-.booking-form input,
-.booking-form select {
-    width: 100%;
-    padding: 10px;
-    font-size: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+/* =========================================================
+   TITLES / TEXT
+========================================================= */
+.onx-block-title{
+  margin-bottom:8px;
+  font-size:1rem;
+  font-weight:900;
+}
+.onx-label{
+  margin-bottom:6px;
+  font-size:.95rem;
+  font-weight:800;
+}
+.onx-help{
+  font-size:13px;
+  color:rgba(255,255,255,.65);
+}
+.onx-submit{
+  border-radius:999px !important;
+  padding:.95rem 1.15rem !important;
+  font-weight:900 !important;
+}
+.onx-mini-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:.45rem;
+  padding:.4rem .72rem;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04);
+  color:rgba(255,255,255,.82);
+  font-size:.82rem;
+  font-weight:800;
+}
+.onx-empty{
+  color:rgba(255,255,255,.45);
 }
 
-
-
-.booking-section {
-  background-color: #15151540;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding-top: 70px;
-  padding-bottom: 70px;
-  position: relative;
-
+/* =========================================================
+   SERVICE SWITCH
+========================================================= */
+.onx-service-switch{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:12px;
+}
+.onx-service-card{
+  cursor:pointer;
+  display:block;
+  width:100%;
+  min-height:110px;
+  padding:16px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  transition:.22s ease;
+  text-align:right;
+}
+.onx-service-card:hover{
+  transform:translateY(-2px);
+  border-color:rgba(255,106,0,.35);
+}
+.onx-service-card.active{
+  border-color:rgba(255,106,0,.55);
+  background:rgba(255,106,0,.12);
+  box-shadow:0 0 26px rgba(255,106,0,.14);
+}
+.onx-service-card h4{
+  font-size:1.05rem;
+  margin-bottom:6px !important;
+}
+.onx-service-card p{
+  font-size:.9rem;
+  margin-bottom:0 !important;
 }
 
-.booking-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.48); /* طبقة بيضاء شفافة */
-
+/* =========================================================
+   PACKAGE OPTIONS
+========================================================= */
+.onx-simple-packages{
+  display:grid;
+  gap:10px;
+}
+.onx-simple-option{
+  display:block;
+  width:100%;
+  cursor:pointer;
+}
+.onx-simple-option input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+.onx-simple-option-body{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  width:100%;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  border-radius:18px;
+  padding:14px 16px;
+  transition:.2s ease;
+}
+.onx-simple-option:hover .onx-simple-option-body{
+  border-color:rgba(255,106,0,.35);
+  transform:translateY(-1px);
+}
+.onx-simple-option input:checked + .onx-simple-option-body{
+  border-color:rgba(255,106,0,.58);
+  background:rgba(255,106,0,.12);
+  box-shadow:0 0 20px rgba(255,106,0,.12);
+}
+.onx-simple-option .title{
+  font-weight:800;
+  color:rgba(255,255,255,.92);
+}
+.onx-simple-option .price{
+  color:rgba(255,255,255,.72);
+  font-weight:800;
+  font-size:.95rem;
 }
 
-
-.app-container {
-	border-radius: 12px;
-	overflow: hidden;
-	width: 720px;
-	max-width: 100%;
-	position: relative;
-	top: 10px;
-	left: 0;
-	right: 0;
-    margin-bottom: 35px;
-	background: linear-gradient(145deg, #2a2a2a, #1c1c1c);
-	box-shadow:
-		0 10px 20px rgba(0, 0, 0, 0.3),     /* ظل سفلي */
-		0 4px 6px rgba(255, 255, 255, 0.05), /* لمعان خفيف */
-		inset 0 1px 3px rgba(255, 255, 255, 0.05); /* عمق داخلي */
-
-	transition: all 0.3s ease;
+/* =========================================================
+   FORM INPUTS
+========================================================= */
+.onx-input,
+.onx-input.form-control,
+select.onx-input,
+textarea.onx-input{
+  color:#fff !important;
+  background:rgba(255,255,255,.05) !important;
+  border:1px solid rgba(255,255,255,.12) !important;
+  padding:.68rem .85rem !important;
+  border-radius:14px !important;
+  box-shadow:none !important;
 }
-.buttons-container {
-   color: #FF693C;
-	position: absolute;
-	bottom: 15px;
-	 right: 20px;
-	height: 40px;
-	font-family: "Roboto", sans-serif;
+.onx-input:focus,
+.onx-input.form-control:focus,
+select.onx-input:focus,
+textarea.onx-input:focus{
+  color:#fff !important;
+  border-color:rgba(255,106,0,.55) !important;
+  box-shadow:0 0 0 .18rem rgba(255,106,0,.12) !important;
 }
-.buttons-container button{
-   background-color: #e04617;
-
+.onx-input::placeholder,
+textarea.onx-input::placeholder{
+  color:rgba(255,255,255,.45) !important;
 }
-.cancel-button,
-.save-button {
-	float: left;
-	height: 40px;
-	line-height: 40px;
-	padding: 0 15px;
-	border-radius: 2px;
-	margin-right: 15px;
-	cursor: pointer;
-	transition: all 0.15s ease;
+select.onx-input{
+  appearance:auto;
+  -webkit-appearance:auto;
+  -moz-appearance:auto;
+  line-height:1.5;
 }
-.cancel-button {
-	background: white;
-	color: #c95518;
-}
-.save-button {
-	background: #c95518;
-	color: white;
+select.onx-input option{
+  background:#111 !important;
+  color:#fff !important;
 }
 
-/* Datepicker Stuff */
-.datepicker {
-    position: relative;
-	width: 100%;
-    display: block;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-    font-family: "Roboto", sans-serif;
-	overflow: hidden;
-	transition: background 0.15s ease;
-}
-.datepicker.am {
-	background: white;
-}
-.datepicker.pm {
-	background: #c95518;
-}
-.datepicker-header {
-	width: 100%;
-    color: white;
-	overflow: hidden;
-}
-.datepicker-title {
-	width: 50%;
-	float: left;
-	height: 60px;
-	line-height: 60px;
-	padding: 0 15px;
-	text-align: left;
-	font-size: 20px;
-}
-.datepicker-subheader {
-	width: 50%;
-	float: left;
-	height: 60px;
-	line-height: 60px;
-	font-size: 14px;
-	padding: 0 15px;
-	text-align: right;
-}
-.datepicker-calendar {
-
-    width: 80%;
-	float: left;
-    padding: 20px 15px 15px;
-    max-width: 400px;
-    display: block;
-}
-.calendar-header {
-    color: black;
-    font-weight: bolder;
-    text-align: center;
-    font-size: 18px;
-    padding: 10px 0;
-    position: relative;
-}
-.current-month-container {
-    display: inline-block;
-    height: 30px;
-    position: relative;
-}
-.goback,
-.goforward {
-    height: 30px;
-    width: 30px;
-    border-radius: 30px;
-    display: inline-block;
-    cursor: pointer;
-    position: relative;
-    top: -4px;
-}
-.goback path,
-.goforward path {
-	transition: stroke 0.15s ease;
-}
-.goback {
-    float: left;
-    margin-left: 3.8%;
-}
-.goforward {
-    float: right;
-    margin-right: 3.8%;
-}
-.calendar-day-header {
-    width: 100%;
-    position: relative;
-}
-.day-label {
-    color: #8A8A8A;
-    padding: 5px 0;
-    width: 14.2857142%;
-    display: inline-block;
-    text-align: center;
-}
-.datecontainer {
-    width: 14.2857142%;
-    display: inline-block;
-    text-align: center;
-    padding: 4px 0;
-}
-.datenumber {
-    max-width: 35px;
-    max-height: 35px;
-    line-height: 35px;
-    margin: 0 auto;
-    color: #8A8A8A;
-    position: relative;
-    text-align: center;
-    cursor: pointer;
-    z-index: 1;
-    transition: all .25s cubic-bezier(0.7,-0.12, 0.2, 1.12);
-}
-.no-hover .datenumber,
-.no-hover .datenumber:hover,
-.no-hover .datenumber:before,
-.no-hover .datenumber:hover::before {
-    cursor: default;
-    color: #8A8A8A;
-    background: transparent;
-    opacity: 0.5;
-}
-.no-hover .datenumber.day-selected {
-    color: white;
-}
-.datenumber:hover {
-    color: white;
-}
-.datenumber:before {
-    content: '';
-    display: block;
-    position: absolute;
-    height: 35px;
-    width: 35px;
-    border-radius: 100px;
-    z-index: -1;
-    background: transparent;
-    -webkit-transform: scale(0.75);
-    -moz-transform: scale(0.75);
-    -ms-transform: scale(0.75);
-    -o-transform: scale(0.75);
-    transform: scale(0.75);
-    transition: all .25s cubic-bezier(0.7,-0.12, 0.2, 1.12);
-    transition-property: background, transform, color, border;
-}
-.datenumber:hover::before {
-    background: #FFAB91;
-    -webkit-transform: scale(1);
-    -moz-transform: scale(1);
-    -ms-transform: scale(1);
-    -o-transform: scale(1);
-    transform: scale(1);
-}
-.day-selected {
-    color: white;
-}
-.datenumber.day-selected:before {
-    background: #FF6E40;
-    -webkit-transform: scale(1);
-    -moz-transform: scale(1);
-    -ms-transform: scale(1);
-    -o-transform: scale(1);
-    transform: scale(1);
-    -webkit-animation: select-date .25s forwards;
-    -moz-animation: select-date .25s forwards;
-    animation: select-date .25s forwards;
-}
-@-webkit-keyframes select-date {
-    0% { background: #FFAB91; }
-    100% { background: #FF6E40; }
-}
-@keyframes select-date {
-    0% { background: #FFAB91; }
-    100% { background: #FF6E40; }
+#bookingForm .row.g-3{
+  --bs-gutter-y:.9rem;
+  --bs-gutter-x:.9rem;
 }
 
-/* timepicker styles */
-.timepicker-container-outer {
-  width: 50%;
-  max-width: 700px;
-  float: left;
-  display: block;
-  padding: 40px 30px 30px;
-  position: relative;
-  top: 50px;
-  overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.15s ease;
+/* =========================================================
+   SIDE CARDS
+========================================================= */
+#calendarCard{
+  position:static !important;
+  top:auto !important;
 }
 
-.timepicker-container-inner {
-  width: 100%;
-  height: 100%;
-  max-width: 320px;
-  margin: 0 auto;
-  position: relative;
-  display: block;
+/* =========================================================
+   CALENDAR TOOLBAR
+========================================================= */
+.onx-calendar-toolbar{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:12px;
 }
 
-.timeline-container {
-  display: block;
-  float: left;
-  position: relative;
-  width: 100%;
-  height: 36px;
+.onx-calendar-select{
+  min-width:120px;
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;
+  padding:8px 12px;
+  font-weight:800;
+  outline:none;
+}
+.onx-calendar-select:focus{
+  border-color:rgba(255,106,0,.55);
+  box-shadow:0 0 0 .18rem rgba(255,106,0,.12);
+}
+.onx-calendar-select option{
+  background:#111;
+  color:#fff;
 }
 
-.current-time {
-  display: block;
-  position: absolute;
-  z-index: 1;
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  top: -25px;
-  left: -20px;
-  cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-}
-.current-time::after {
-  content: '';
-  display: block;
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  background: #FF6E40;
-  transition: all 0.15s ease;
-  -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
-  border-radius: 20px 20px 3px 20px;
-  z-index: -1;
-  top: 0;
+/* =========================================================
+   CALENDAR FULL WIDTH
+========================================================= */
+.onx-calendar-shell{
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);
+  border-radius:22px;
+  padding:10px;
+  overflow:hidden;
+  display:block;
 }
 
-.actual-time {
-  color: white;
-  line-height: 40px;
-  font-size: 12px;
-  text-align: center;
-  transition: all 0.15s ease;
+#onxCalendar{
+  width:100%;
+  display:block;
 }
 
-.timeline {
-  display: block;
-  z-index: 1;
-  width: 100%;
-  height: 2px;
-  position: absolute;
-  bottom: 0;
-}
-.timeline::before, .timeline::after {
-  content: '';
-  display: block;
-  width: 2px;
-  height: 10px;
-  top: -6px;
-  position: absolute;
-  background: #c95518;
-  left: -1px;
-  transition: background 0.15s ease;
-}
-.timeline::after {
-  left: auto;
-  right: -1px;
+/* flatpickr main */
+#onxCalendar .flatpickr-calendar,
+#onxCalendar .flatpickr-calendar.inline{
+  display:block !important;
+  width:100% !important;
+  min-width:100% !important;
+  max-width:100% !important;
+  margin:0 !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
 }
 
-.hours-container {
-  display: block;
-  z-index: 0;
-  width: 100%;
-  height: 10px;
-  position: absolute;
-  top: 31px;
-  left: 1px;
+/* hide internal header because month/year are external */
+#onxCalendar .flatpickr-months{
+  display:none !important;
 }
 
-.hour-mark {
-  width: 2px;
-  display: block;
-  float: left;
-  height: 4px;
-  background: #c95518;
-  position: relative;
-  margin-left: calc((100% / 12) - 2px);
-  transition: background 0.15s ease;
-}
-.hour-mark:nth-child(3n) {
-  height: 6px;
-  top: -1px;
+/* containers take full width */
+#onxCalendar .flatpickr-innerContainer,
+#onxCalendar .flatpickr-rContainer,
+#onxCalendar .flatpickr-days,
+#onxCalendar .flatpickr-weekdays,
+#onxCalendar .dayContainer{
+  width:100% !important;
+  min-width:100% !important;
+  max-width:100% !important;
 }
 
-.display-time {
-  width: calc(60% - 30px);
-  display: block;
-  margin-top: 30px;
-  height: 36px;
-  line-height: 36px;
-  overflow: hidden;
-  float: left;
-  position: relative;
-  font-size: 20px;
-  text-align: center;
-  transition: color 0.15s ease;
-}
-.decrement-time,
-.increment-time {
-  cursor: pointer;
-  position: absolute;
-  display: block;
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
-  top: 6px;
-  font-size: 20px;
-}
-.decrement-time {
-  left: 0;
-  text-align: left;
-}
-.increment-time {
-  right: 0;
-  text-align: right;
-}
-.increment-time path,
-.decrement-time path{
-	transition: all 0.15s ease;
-}
-.time {
-    width: calc(100% - 48px);
-	position: relative;
-	left: 24px;
-	height: 36px;
-	&:after {
-		content: '';
-		height: 2px;
-		width: 100%;
-		position: absolute;
-		bottom: 0;
-		background: white;
-		left: 0;
-		right: 0;
-		opacity: 0.5;
-		transition: all 0.15s ease;
-	}
-}
-.time.time-active:after {
-	display: none;
-}
-.time-input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 34px;
-    line-height: 34px;
-    bottom: 2px;
-    width: 100%;
-    border: none;
-    background: none;
-    text-align: center;
-    color: #212529;
-    font-size: inherit;
-    opacity: 0; /* ← يكون مخفيًا افتراضيًا */
-    transition: all 0.15s ease;
-    cursor: pointer;
-    z-index: 1;
+#onxCalendar .flatpickr-innerContainer,
+#onxCalendar .flatpickr-rContainer,
+#onxCalendar .flatpickr-days{
+  display:block !important;
 }
 
-.time-input:focus {
-    background: #ffffff; /* ← خلفية بيضاء عند التركيز */
-    color: #212529;      /* ← لون نص داكن */
-    opacity: 1;          /* ← إظهار النص */
-    cursor: text;
-    z-index: 2;
-    outline: none;
+/* weekdays full width */
+#onxCalendar .flatpickr-weekdays{
+  display:grid !important;
+  grid-template-columns:repeat(7,1fr);
+}
+#onxCalendar .flatpickr-weekday{
+  width:auto !important;
+  flex:unset !important;
+  text-align:center;
+  color:rgba(255,255,255,.88) !important;
+  font-size:.88rem;
+  font-weight:800;
 }
 
-.time-input:focus ~ .formatted-time {
-    background: #c95518;
-    color: white;
-    border-radius: 4px;
-    cursor: default;
+/* days grid */
+#onxCalendar .dayContainer{
+  display:grid !important;
+  grid-template-columns:repeat(7, minmax(0,1fr));
+  gap:2px;
 }
 
-
-.am-pm-container {
-  width: 40%;
-  padding-left: 15px;
-  float: right;
-  height: 36px;
-  line-height: 36px;
-  display: block;
-  position: relative;
-  margin-top: 30px;
+/* days */
+#onxCalendar .flatpickr-day{
+  width:100% !important;
+  min-width:0 !important;
+  max-width:none !important;
+  margin:0 !important;
+  height:38px !important;
+  line-height:38px !important;
+  border-radius:12px !important;
+  font-weight:700;
+  color:rgba(255,255,255,.92) !important;
+  font-size:.95rem !important;
 }
 
-.am-pm-button {
-  width: calc(50% - 5px);
-  height: 36px;
-  line-height: 36px;
-  background: #2196F3;
-  text-align: center;
-  color: white;
-  border-radius: 4px;
-  float: left;
-  cursor: pointer;
+/* states */
+#onxCalendar .flatpickr-day.today{
+  border:1px solid rgba(255,106,0,.52) !important;
 }
-.am-pm-button:first-child {
-  background: #c95518;
-  color: white;
+#onxCalendar .flatpickr-day.selected{
+  background:rgba(255,106,0,.88) !important;
+  border-color:rgba(255,106,0,.88) !important;
+  color:#111 !important;
 }
-.am-pm-button:last-child {
-  background: white;
-  color: #c95518;
-  margin-left: 10px;
+#onxCalendar .flatpickr-day.onx-booked-day{
+  background:rgba(220,53,69,.18) !important;
+  border:1px solid rgba(220,53,69,.55) !important;
+  color:rgba(255,255,255,.88) !important;
 }
-
-@-webkit-keyframes select-date-pm {
-	0% { background: rgba(255,255,255,0.5); }
-	100% { background: #FFF; }
+#onxCalendar .flatpickr-day.onx-booked-day:hover{
+  background:rgba(220,53,69,.24) !important;
 }
-@keyframes select-date-pm {
-	0% { background: rgba(255,255,255,0.5); }
-	100% { background: #FFF; }
+#onxCalendar .flatpickr-day.onx-pending-day{
+  background:rgba(255,159,28,.20) !important;
+  border:1px solid rgba(255,159,28,.60) !important;
+  color:rgba(255,255,255,.92) !important;
 }
-
-
-.datepicker.am {
-	.datepicker-header {
-		color: white;
-		background: #2a2828;
-	}
-	.current-time::after {
-		background: #c95518;
-	}
-	.actual-time {
-	    color: white;
-	}
-	.display-time {
-	    color: #FF6E40;
-	}
-	.time-input {
-		color: #FF693C;
-	}
-	.time:after {
-		background: #FF693C;
-	}
-	.increment-time path,
-	.decrement-time path{
-		stroke: #FF693C;
-	}
+#onxCalendar .flatpickr-day.onx-pending-day:hover{
+  background:rgba(255,159,28,.28) !important;
+  border-color:rgba(255,159,28,.72) !important;
+  color:#fff !important;
+}
+#onxCalendar .flatpickr-day.onx-pending-day.selected{
+  background:rgba(255,159,28,.34) !important;
+  border-color:rgba(255,159,28,.90) !important;
+  color:#fff !important;
+}
+#onxCalendar .flatpickr-day.onx-booked-day.selected{
+  background:rgba(220,53,69,.32) !important;
+  border-color:rgba(220,53,69,.90) !important;
+  color:#fff !important;
+}
+#onxCalendar .flatpickr-day.disabled,
+#onxCalendar .flatpickr-day.flatpickr-disabled{
+  opacity:.46 !important;
+  cursor:not-allowed !important;
 }
 
-.datepicker.pm {
-	.datepicker-header {
-		background: white;
-		color: #FF693C;
-	}
-	.datepicker-subheader {
-		color: #c95518;
-	}
-
-	.goback:before,
-	.goback:after,
-	.goforward:before,
-	.goforward:after {
-		background: white;
-	}
-	.day-label {
-		color: white;
-	}
-	.datenumber {
-		color: white;
-	}
-	.datenumber:hover::before {
-		background: rgba(255,255,255,0.5);
-		-webkit-transform: scale(1);
-		-moz-transform: scale(1);
-		-ms-transform: scale(1);
-		-o-transform: scale(1);
-		transform: scale(1);
-	}
-	.datenumber.day-selected {
-		color: #FF693C;
-	}
-	.datenumber.day-selected:before {
-		background: white;
-		-webkit-animation: select-date-pm .25s forwards;
-		-moz-animation: select-date-pm .25s forwards;
-		animation: select-date-pm .25s forwards;
-	}
-	.current-month-container {
-		color: white;
-	}
-	.current-time::after {
-	    background: white;
-	}
-	.actual-time {
-	    color: #FF6E40;
-	}
-	.display-time {
-    	color: white;
-	}
-	.timeline::before, .pm .timeline::after {
-	    background: white;
-	}
-	.hour-mark {
-		background: white;
-	}
-	.am-pm-button:last-child {
-		color: #FF6E40;
-	}
-	.cancel-button {
-		background: none;
-		color: white;
-	}
-	.save-button {
-		background: white;
-		color: #FF693C;
-	}
-	.goback path,
-	.goforward path {
-		stroke: white;
-	}
-	.time-input:focus ~ .formatted-time {
-	  background: #c95518;
-    color: white;
-    border-radius: 4px;
-	}
+/* arrows */
+#onxCalendar .flatpickr-prev-month,
+#onxCalendar .flatpickr-next-month{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:42px !important;
+  height:42px !important;
+  color:#fff !important;
+  fill:#fff !important;
+  opacity:1 !important;
+}
+#onxCalendar .flatpickr-prev-month:hover,
+#onxCalendar .flatpickr-next-month:hover{
+  color:#ff6a00 !important;
+  fill:#ff6a00 !important;
+}
+.onx-cal-arrow{
+  font-size:34px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
 }
 
-.datepicker.compact {
-	.datepicker-title,
-	.datepicker-subheader {
-		width: 100%;
-		text-align: center;
-	}
-	.datepicker-title {
-		height: 50px;
-		line-height: 50px;
-	}
-	.datepicker-subheader {
-		height: 30px;
-		line-height: 30px;
-	}
-    .display-time {
-        width: 60%;
-        font-size: 20px;
-        line-height: 36px;
-    }
-	.app-container {
-		width: 100%;
-	}
-	.datepicker-calendar {
-		width: 100%;
-		margin: 0 auto;
-		float: none;
-	}
-	.timepicker-container-outer {
-		width: 100%;
-		margin: 0 auto;
-		float: none;
-		top: -15px;
-	}
-	.buttons-container {
-		position: relative;
-		float: right;
-	}
+/* =========================================================
+   STATUS BOX
+========================================================= */
+.onx-status{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  border-radius:16px;
+  padding:12px 14px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);
+  font-weight:800;
+}
+.onx-status .dot{
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:rgba(255,255,255,.22);
+}
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+.onx-summary{
+  display:block;
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);
+  padding:18px;
+}
+.onx-summary-row{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.onx-summary-row:last-child{
+  border-bottom:0;
+}
+.onx-summary-row .k{
+  color:rgba(255,255,255,.68);
+}
+.onx-summary-row .v{
+  font-weight:800;
+  text-align:left;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 992px){
+  .onx-booking-shell{
+    grid-template-columns:1fr !important;
+  }
+}
+
+@media (max-width: 768px){
+  .onx-hero-booking{
+    min-height:48vh;
+  }
+
+  .onx-hero-booking h1{
+    font-size:1.8rem;
+  }
+
+  .onx-service-switch{
+    grid-template-columns:1fr !important;
+  }
+
+  #onxCalendar .flatpickr-day{
+    height:38px !important;
+    line-height:38px !important;
+  }
 }
