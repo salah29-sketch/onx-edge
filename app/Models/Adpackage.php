@@ -17,4 +17,8 @@ class AdPackage extends Model
     'is_featured' => 'boolean',
     'price'       => 'decimal:2',
 ];
+public function bookings()
+{
+  return $this->morphMany(\App\Models\Booking::class, 'package');
+}
 }

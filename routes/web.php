@@ -1,115 +1,186 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\BookingConfirmationMail;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\Admin\EventLocationController;
-use App\Http\Controllers\Admin\AdPackageController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ReservationController;
 
-
+use App\Http\Controllers\Admin\HomeController as AdminHomeController;
+use App\Http\Controllers\Admin\PermissionsController as AdminPermissionsController;
+use App\Http\Controllers\Admin\EventPackagesController as AdminEventPackagesController;
+use App\Http\Controllers\Admin\AdpackageController as AdminAdpackageController;
+use App\Http\Controllers\Admin\RolesController as AdminRolesController;
+use App\Http\Controllers\Admin\UsersController as AdminUsersController;
+use App\Http\Controllers\Admin\ServicesController as AdminServicesController;
+use App\Http\Controllers\Admin\EmployeesController as AdminEmployeesController;
+use App\Http\Controllers\Admin\ClientsController as AdminClientsController;
+use App\Http\Controllers\Admin\AppointmentsController as AdminAppointmentsController;
+use App\Http\Controllers\Admin\SystemCalendarController as AdminSystemCalendarController;
+use App\Http\Controllers\Admin\AdminController as AdminSettingsController;
+use App\Http\Controllers\Admin\EditableContentController as AdminEditableContentController;
+use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
+use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
+use App\Http\Controllers\Admin\EventLocationController as AdminEventLocationController;
+use App\Http\Controllers\Admin\BookingsController as AdminBookingsController;
+use App\Http\Controllers\Admin\BookingsCalendarController as AdminBookingsCalendarController;
+/*
+|--------------------------------------------------------------------------
+| Front Routes (موقع الزوار)
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', [HomeController::class ,'index'])->name('home');
+
 Route::get('/portfolio', [HomeController::class ,'portfolio'])->name('portfolio');
-Route::get('/booking', [HomeController::class ,'booking'])->name('booking');
-Route::post('/check-appointment', [HomeController::class, 'checkAvailability']);
+
 Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/services/events', [ServiceController::class, 'events'])->name('services.events');
 Route::get('/services/marketing', [ServiceController::class, 'marketing'])->name('services.marketing');
-// Route::post('/reservation-api', [ReservationController::class, 'store']);
 
+/*
+|--------------------------------------------------------------------------
+| Booking Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/booking', [BookingController::class, 'index'])->name('booking');
+
+Route::get('/booking/booked-days', [BookingController::class, 'bookedDays'])->name('booking.bookedDays');
+
+Route::get('/booking/check', [BookingController::class, 'checkDate'])->name('booking.check');
+
+Route::post('/booking', [ReservationController::class, 'store'])->name('booking.store');
+/*
+|--------------------------------------------------------------------------
+| API Reservation (اختياري)
+|--------------------------------------------------------------------------
+*/
 
 Route::post('/reservation-api', [ReservationController::class, 'store']);
 
-Route::get('/saleh' , [HomeController::class , 'saleh']);
+
+/*
+|--------------------------------------------------------------------------
+| Misc
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/saleh', [HomeController::class , 'saleh']);
 
 Route::redirect('/home', '/admin');
+
+
+/*
+|--------------------------------------------------------------------------
+| Auth
+|--------------------------------------------------------------------------
+*/
+
 Auth::routes(['register' => false]);
 
+
+/*
+|--------------------------------------------------------------------------
+| Translation JS
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/lang.js', function () {
+
     $translations = [
         'booking' => __('booking'),
         'home' => __('home'),
-        // أضف ملفات لغة أخرى هنا حسب الحاجة
     ];
 
     $js = 'window.translations = ' . json_encode($translations, JSON_UNESCAPED_UNICODE) . ';';
+
     return response($js)->header('Content-Type', 'application/javascript');
 });
 
 
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
-    Route::get('/', 'HomeController@index')->name('home');
+Route::group([
+    'prefix' => 'admin',
+    'as' => 'admin.',
+    'middleware' => ['auth']
+], function () {
+
+    // Dashboard
+    Route::get('/', [AdminHomeController::class, 'index'])->name('home');
+
     // Permissions
-    Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
-    Route::resource('permissions', 'PermissionsController');
+    Route::delete('permissions/destroy', [AdminPermissionsController::class, 'massDestroy'])->name('permissions.massDestroy');
+    Route::resource('permissions', AdminPermissionsController::class);
 
-    // event-packages
-    Route::resource('event-packages', 'EventPackagesController');
+    // Event Packages
+    Route::resource('event-packages', AdminEventPackagesController::class);
 
-    // adpackages
-    Route::resource('adpackages', 'AdpackageController');
+    // Ad Packages
+    Route::resource('adpackages', AdminAdpackageController::class);
 
     // Roles
-    Route::delete('roles/destroy', 'RolesController@massDestroy')->name('roles.massDestroy');
-    Route::resource('roles', 'RolesController');
+    Route::delete('roles/destroy', [AdminRolesController::class, 'massDestroy'])->name('roles.massDestroy');
+    Route::resource('roles', AdminRolesController::class);
 
     // Users
-    Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
-    Route::resource('users', 'UsersController');
+    Route::delete('users/destroy', [AdminUsersController::class, 'massDestroy'])->name('users.massDestroy');
+    Route::resource('users', AdminUsersController::class);
 
     // Services
-    Route::delete('services/destroy', 'ServicesController@massDestroy')->name('services.massDestroy');
-    Route::post('services/media', 'ServicesController@storeMedia')->name('services.storeMedia');
-    Route::resource('services', 'ServicesController');
+    Route::delete('services/destroy', [AdminServicesController::class, 'massDestroy'])->name('services.massDestroy');
+    Route::post('services/media', [AdminServicesController::class, 'storeMedia'])->name('services.storeMedia');
+    Route::resource('services', AdminServicesController::class);
 
     // Employees
-    Route::delete('employees/destroy', 'EmployeesController@massDestroy')->name('employees.massDestroy');
-    Route::post('employees/media', 'EmployeesController@storeMedia')->name('employees.storeMedia');
-    Route::resource('employees', 'EmployeesController');
+    Route::delete('employees/destroy', [AdminEmployeesController::class, 'massDestroy'])->name('employees.massDestroy');
+    Route::post('employees/media', [AdminEmployeesController::class, 'storeMedia'])->name('employees.storeMedia');
+    Route::resource('employees', AdminEmployeesController::class);
 
     // Clients
-    Route::delete('clients/destroy', 'ClientsController@massDestroy')->name('clients.massDestroy');
-    Route::resource('clients', 'ClientsController');
+    Route::delete('clients/destroy', [AdminClientsController::class, 'massDestroy'])->name('clients.massDestroy');
+    Route::resource('clients', AdminClientsController::class);
 
     // Appointments
-    Route::delete('appointments/destroy', 'AppointmentsController@massDestroy')->name('appointments.massDestroy');
-    Route::resource('appointments', 'AppointmentsController');
-    Route::POST('appointments/{appointment}/confirm', 'AppointmentsController@confirm')->name('appointments.confirm');
+    Route::delete('appointments/destroy', [AdminAppointmentsController::class, 'massDestroy'])->name('appointments.massDestroy');
+    Route::resource('appointments', AdminAppointmentsController::class);
+    Route::post('appointments/{appointment}/confirm', [AdminAppointmentsController::class, 'confirm'])->name('appointments.confirm');
 
+    // System Calendar
+    Route::get('system-calendar', [AdminSystemCalendarController::class, 'index'])->name('systemCalendar');
 
-    Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
+    // Settings
+    Route::get('settings/home', [AdminSettingsController::class, 'edit'])->name('settings.page');
+    Route::post('settings/inlineUpdate', [AdminSettingsController::class, 'updateInline'])->name('update.inline');
+    Route::post('settings/servUpdate', [AdminSettingsController::class, 'update'])->name('update.serivesList');
 
+    Route::post('editable-content/update', [AdminEditableContentController::class, 'update'])->name('editable.update');
+    Route::post('editable-content/upload-image', [AdminEditableContentController::class, 'uploadImage'])->name('editable.uploadImage');
 
-    Route::get('settings/home' ,  'AdminController@edit')->name('settings.page');
-    Route::post('settings/inlineUpdate' ,'AdminController@updateInline' )->name('update.inline');
-    Route::post('settings/servUpdate' ,'AdminController@update' )->name('update.serivesList');
-    Route::post('editable-content/update', 'EditableContentController@update')->name('editable.update');
-    Route::post('editable-content/upload-image', 'EditableContentController@uploadImage')->name('editable.uploadImage');
+    // Gallery
+    Route::get('gallery', [AdminGalleryController::class, 'index'])->name('gallery.index');
+    Route::post('gallery', [AdminGalleryController::class, 'store'])->name('gallery.store');
+    Route::delete('gallery/{id}', [AdminGalleryController::class, 'destroy'])->name('gallery.destroy');
+    Route::post('gallery/toggle-home/{id}', [AdminGalleryController::class, 'toggleHome'])->name('gallery.toggleHome');
 
+    // Company
+    Route::get('company', [AdminCompanyController::class, 'index'])->name('company');
+    Route::post('company-settings', [AdminCompanyController::class, 'update'])->name('company.update');
 
-    Route::get('/gallery', 'GalleryController@index')->name('gallery.index');
-    Route::post('/gallery', 'GalleryController@store')->name('gallery.store');
-    Route::delete('/gallery/{id}', 'GalleryController@destroy')->name('gallery.destroy');
-    Route::post('/admin/gallery/toggle-home/{id}', 'GalleryController@toggleHome')->name('gallery.toggleHome');
+    // Event Locations
+    Route::delete('eventlocations/destroy', [AdminEventLocationController::class, 'massDestroy'])->name('eventlocations.massDestroy');
+    Route::resource('eventlocations', AdminEventLocationController::class)->except(['show']);
 
-
-    Route::get('/company' , 'CompanyController@index')->name('company');
-    Route::post('/company-settings','CompanyController@update')->name('company.update');
-
-    Route::get('/booking-notes', 'AdminBookingNoteController@edit')->name('booking_notes.edit');
-    Route::post('/booking-notes', 'AdminBookingNoteController@update')->name('booking_notes.update');
-
-
-
-     Route::delete('event-locations/destroy', 'EventLocationController@massDestroy')->name('event-locations.massDestroy');
-     Route::post('event-locations/media', 'EventLocationController@storeMedia')->name('event-locations.storeMedia');
-     Route::resource('event-locations', 'EventLocationController');
-
-
-
+    // Bookings
+    Route::get('bookings-calendar', [AdminBookingsCalendarController::class, 'index'])->name('bookings.calendar');
+    Route::post('bookings/{booking}/status', [AdminBookingsController::class, 'updateStatus'])->name('bookings.updateStatus');
+    Route::post('bookings/{booking}/update-details', [AdminBookingsController::class, 'updateDetails'])->name('bookings.updateDetails');
+    Route::resource('bookings', AdminBookingsController::class)->only(['index', 'show', 'destroy']);
 });
